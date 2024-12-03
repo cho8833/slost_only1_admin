@@ -1,14 +1,17 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class ButtonBase extends StatelessWidget {
-  const ButtonBase({super.key, required this.onTap, required this.child});
+  const ButtonBase({super.key, required this.onTap, required this.child, this.onHover});
 
   final void Function() onTap;
   final Widget child;
+  final void Function(PointerHoverEvent)? onHover;
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
+      onHover: onHover,
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,

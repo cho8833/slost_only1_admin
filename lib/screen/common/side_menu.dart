@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:slost_only1_admin/widget/animated_arrow.dart';
 import 'package:slost_only1_admin/widget/height_animation_box.dart';
 import 'package:slost_only1_admin/widget/section_box.dart';
@@ -8,8 +9,20 @@ class SideMenu extends StatelessWidget {
 
   static final Map<String, List<SectionContent Function(BuildContext)>>
       _sideBarAttributes = {
-    "사용자 관리": [(context) => SectionContent(onPressed: () {}, title: "강사 관리")],
-    "글 관리": [(context) => SectionContent(onPressed: () {}, title: "리뷰 관리")]
+    "사용자 관리": [
+      (context) => SectionContent(
+          onPressed: () {
+            context.go("/teacher");
+          },
+          title: "강사 관리")
+    ],
+    "글 관리": [
+      (context) => SectionContent(
+          onPressed: () {
+            context.go("/review");
+          },
+          title: "리뷰 관리")
+    ]
   };
 
   static const TextStyle _sectionTitleStyle = TextStyle(

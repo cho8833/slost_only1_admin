@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slost_only1_admin/provider/auth_provider.dart';
+import 'package:slost_only1_admin/provider/review_provider.dart';
+import 'package:slost_only1_admin/provider/teacher_provider.dart';
 import 'package:slost_only1_admin/provider/token_provider.dart';
 import 'package:slost_only1_admin/repository/impl/secure_storage_impl.dart';
 import 'package:slost_only1_admin/repository/secure_storage.dart';
-import 'package:slost_only1_admin/screen/base/base_screen.dart';
+import 'package:slost_only1_admin/screen/common/base_screen.dart';
 import 'package:slost_only1_admin/screen/login_screen.dart';
 import 'package:slost_only1_admin/screen/main_screen.dart';
 import 'package:slost_only1_admin/screen/manage_review_screen.dart';
 import 'package:slost_only1_admin/screen/manage_teacher_screen.dart';
+import 'package:slost_only1_admin/screen/teacher_details_screen.dart';
 import 'package:slost_only1_admin/support/repository_container.dart';
 import 'package:url_strategy/url_strategy.dart';
 
@@ -18,7 +22,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final SecureStorage secureStorage =
-      SecureStorageImpl(await SharedPreferences.getInstance());
+  SecureStorageImpl(await SharedPreferences.getInstance());
 
   // token provider
   TokenProvider tokenProvider = TokenProvider();
@@ -75,6 +79,10 @@ void main() async {
               GoRoute(
                   path: "teacher",
                   builder: (context, state) => const ManageTeacherScreen()),
+              GoRoute(path: "teacher/:id",
+                  builder: (context, state) =>
+                      TeacherDetailsScreen(
+                          id: int.parse(state.pathParameters['id']!))),
               GoRoute(
                   path: "review",
                   builder: (context, state) => const ManageReviewScreen())
@@ -85,9 +93,10 @@ void main() async {
   final GoRouter router = GoRouter(
       routes: routes,
       navigatorKey: rootNavKey,
-      errorBuilder: (context, state) => const Scaffold(
-            body: Center(child: Text("허가된 사용자만 이용 가능합니다")),
-          ));
+      errorBuilder: (context, state) =>
+      const Scaffold(
+        body: Center(child: Text("허가된 사용자만 이용 가능합니다")),
+      ));
 
   runApp(Main(router: router));
 }
@@ -99,8 +108,17 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: router,
+    RepositoryContainer rc = RepositoryContainer();
+    return MultiProvider(
+        providers: [
+          Provider(create: (context) => ReviewProvider(rc.reviewRepository)),
+          Provider(create: (context) => TeacherProvider(rc.teacherRepository))
+        ],
+        builder: (context, _) {
+          return MaterialApp.router(
+            routerConfig: router,
+          );
+        }
     );
   }
 }

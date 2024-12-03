@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:slost_only1_admin/screen/base/header.dart';
-import 'package:slost_only1_admin/screen/base/side_menu.dart';
+import 'package:slost_only1_admin/screen/common/header.dart';
+import 'package:slost_only1_admin/screen/common/side_menu.dart';
 
 class BaseScreen extends StatelessWidget {
   const BaseScreen({super.key, required this.child});
