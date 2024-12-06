@@ -11,6 +11,7 @@ class TeacherProfile {
   int id;
   String? name;
   Gender? gender;
+  TeacherProfileStatus status;
   String? profileImageUrl;
   DateTime? birthday;
   String? profileName;
@@ -21,6 +22,7 @@ class TeacherProfile {
       this.id,
       this.name,
       this.gender,
+      this.status,
       this.profileImageUrl,
       this.birthday,
       this.profileName,

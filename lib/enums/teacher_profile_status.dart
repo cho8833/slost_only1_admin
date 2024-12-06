@@ -1,7 +1,7 @@
 enum TeacherProfileStatus {
-  pending("PENDING", "대기중"),
-  approved("APPROVED", "승인됨"),
-  rejected("REJECTED", "거절됨");
+  pending("PENDING", "승인 대기"),
+  approved("APPROVED", "승인"),
+  rejected("REJECTED", "거절");
 
   final String json;
 

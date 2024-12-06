@@ -30,6 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  status_builder:
+    git:
+      url: https://github.com/cho8833/status_builder
+      ref: main
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -44,6 +48,7 @@ dependencies:
   fluttertoast: ^8.2.8
   shared_preferences: ^2.3.3
   provider: ^6.1.2
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:

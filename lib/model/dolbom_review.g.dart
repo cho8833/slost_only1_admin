@@ -11,7 +11,7 @@ DolbomReview _$DolbomReviewFromJson(Map<String, dynamic> json) => DolbomReview(
       json['content'] as String,
       (json['star'] as num).toInt(),
       (json['dolbomId'] as num).toInt(),
-      json['reportContent'] as String,
+      json['reportContent'] as String?,
       ReviewReportReason.fromJson(json['reportReason'] as String),
     );
 

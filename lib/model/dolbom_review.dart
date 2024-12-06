@@ -9,7 +9,7 @@ class DolbomReview {
   String content;
   int star;
   int dolbomId;
-  String reportContent;
+  String? reportContent;
   ReviewReportReason reportReason;
 
 

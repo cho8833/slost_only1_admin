@@ -22,6 +22,8 @@ class _ManageTeacherScreenState extends State<ManageTeacherScreen> {
   static const double _profileImageWidth = 150;
   static const double _columnWidth = 200;
 
+  PagedData? listData;
+
   @override
   void initState() {
     super.initState();
@@ -30,83 +32,96 @@ class _ManageTeacherScreenState extends State<ManageTeacherScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Row(
-          children: [
-            SizedBox(
-              width: _profileImageWidth,
-              child: Text("프로필 이미지"),
-            ),
-            SizedBox(
-              width: _columnWidth + 16,
-              child: Text("이름"),
-            ),
-            SizedBox(
-              width: _columnWidth + 16,
-              child: Text("성별"),
-            ),
-            SizedBox(
-              width: _columnWidth + 16,
-              child: Text("자기소개"),
-            )
-          ],
-        ),
-        const SizedBox(height: 16,),
-        FutureBuilder(
-            future: teacherProvider.list(page),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                PagedData<TeacherProfile> data = snapshot.data!;
-                if (data.numberOfElements == 0) {
-                  return const Center(
-                    child: Text("등록된 선생님이 없습니다"),
-                  );
-                }
-                return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: data.numberOfElements,
-                    itemBuilder: (context, index) {
-                      TeacherProfile teacherProfile = data.content[index];
-                      return ButtonBase(
-                        onTap: () {
-                          context.go("/teacher/${teacherProfile.id}");
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            SizedBox(
-                              width: _profileImageWidth,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: _profileImageWidth,
+                child: Text("프로필 이미지"),
+              ),
+              SizedBox(
+                width: _columnWidth + 16,
+                child: Text("이름"),
+              ),
+              SizedBox(
+                width: _columnWidth + 16,
+                child: Text("성별"),
+              ),
+              SizedBox(
+                width: _columnWidth + 16,
+                child: Text("자기소개"),
+              ),
+              SizedBox(
+                width: _columnWidth + 16,
+                child: Text("상태"),
+              )
+            ],
+          ),
+          const SizedBox(height: 16,),
+          Expanded(
+            child: FutureBuilder(
+                future: teacherProvider.list(page),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData) {
+                    PagedData<TeacherProfile> data = snapshot.data!;
+                    if (data.numberOfElements == 0) {
+                      return const Center(
+                        child: Text("등록된 선생님이 없습니다"),
+                      );
+                    }
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: data.numberOfElements,
+                          itemBuilder: (context, index) {
+                            TeacherProfile teacherProfile = data.content[index];
+                            return ButtonBase(
+                              onTap: () {
+                                context.go("/teacher/${teacherProfile.id}");
+                              },
+                              child: Row(
                                 children: [
-                                  ProfileImageCircle(
-                                      imageUrl: teacherProfile.profileImageUrl),
+                                  SizedBox(
+                                    width: _profileImageWidth,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        ProfileImageCircle(
+                                            imageUrl: teacherProfile.profileImageUrl),
+                                      ],
+                                    ),
+                                  ),
+                                  ColumnBox(child: Text(teacherProfile.name ?? "-")),
+                                  ColumnBox(
+                                      child:
+                                          Text(teacherProfile.gender?.title ?? "-")),
+                                  ColumnBox(
+                                      child: Text(teacherProfile.introduce ?? "-")),
+                                  ColumnBox(child: Text(teacherProfile.status.title))
                                 ],
                               ),
-                            ),
-                            ColumnBox(child: Text(teacherProfile.name ?? "-")),
-                            ColumnBox(
-                                child:
-                                    Text(teacherProfile.gender?.title ?? "-")),
-                            ColumnBox(
-                                child: Text(teacherProfile.introduce ?? "-"))
-                          ],
-                        ),
-                      );
-                    });
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(snapshot.error.toString()),
-                );
-              } else {
-                return Container();
-              }
-            }),
-        const SizedBox(height: 32,),
-
-      ],
+                            );
+                          }),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
+                    );
+                  } else {
+                    return Container();
+                  }
+                }),
+          ),
+          const SizedBox(height: 32,)
+        ],
+      ),
     );
   }
 }

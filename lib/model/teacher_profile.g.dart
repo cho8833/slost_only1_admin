@@ -11,6 +11,7 @@ TeacherProfile _$TeacherProfileFromJson(Map<String, dynamic> json) =>
       (json['id'] as num).toInt(),
       json['name'] as String?,
       json['gender'] == null ? null : Gender.fromJson(json['gender'] as String),
+      TeacherProfileStatus.fromJson(json['status'] as String),
       json['profileImageUrl'] as String?,
       json['birthday'] == null
           ? null
@@ -25,6 +26,7 @@ Map<String, dynamic> _$TeacherProfileToJson(TeacherProfile instance) =>
       'id': instance.id,
       'name': instance.name,
       'gender': instance.gender,
+      'status': instance.status,
       'profileImageUrl': instance.profileImageUrl,
       'birthday': instance.birthday?.toIso8601String(),
       'profileName': instance.profileName,

@@ -21,4 +21,13 @@ final class ReviewRepositoryImpl
 
     return getPagedData(response, (p) => DolbomReview.fromJson(p)).data;
   }
+
+  @override
+  Future<void> delete(int id) async {
+    Uri uri = getUri("/dolbom-review/$id");
+
+    Response response = await interceptedClient.delete(uri);
+
+    checkResponse(response);
+  }
 }

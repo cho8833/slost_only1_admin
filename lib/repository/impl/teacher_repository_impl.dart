@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:slost_only1_admin/enums/teacher_profile_status.dart';
 import 'package:slost_only1_admin/model/teacher_profile.dart';
 import 'package:slost_only1_admin/repository/teacher_repository.dart';
 import 'package:slost_only1_admin/support/http_response_handler.dart';
@@ -30,6 +31,17 @@ final class TeacherRepositoryImpl with ServerUri, HttpResponseHandler implements
     Response response = await interceptedClient.get(uri);
 
     return getData(response, (p) => TeacherProfileDetail.fromJson(p)).data;
+  }
+
+  @override
+  Future<void> setStatus(int id, TeacherProfileStatus status) async {
+    Uri uri = getUri("/teacher/$id/status", queryParameters: {
+      "status": status.json
+    });
+
+    Response response =await interceptedClient.post(uri);
+
+    checkResponse(response);
   }
 
 
